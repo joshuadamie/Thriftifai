@@ -15,17 +15,8 @@
       --white: #ffffff;
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
-    }
-
-    body {
-      background-color: var(--bg-light);
-      overflow-x: hidden;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    body { background-color: var(--bg-light); overflow-x: hidden; }
 
     /* Navbar */
     .navbar {
@@ -42,25 +33,10 @@
       width: 100%;
       z-index: 10;
     }
+    .logo { text-decoration: none; color: var(--text-dark); font-size: 1.8rem; font-weight: 600; }
+    .logo:hover { color: var(--primary); }
 
-    .logo {
-      text-decoration: none;
-      color: var(--text-dark);
-      font-size: 1.8rem;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-    }
-
-    .logo:hover {
-      color: var(--primary);
-    }
-
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-
+    .nav-right { display: flex; align-items: center; gap: 20px; }
     .nav-right button {
       background: var(--primary);
       border: none;
@@ -71,16 +47,7 @@
       font-weight: 500;
       transition: all 0.3s ease;
     }
-
-    .nav-right button:hover {
-      background: #f2e6d8;
-      color: var(--text-dark);
-    }
-
-    .nav-right span {
-      font-size: 1.3rem;
-      cursor: pointer;
-    }
+    .nav-right button:hover { background: #f2e6d8; color: var(--text-dark); }
 
     /* Sign Up form */
     .signup-container {
@@ -93,138 +60,12 @@
       margin: 150px auto 0;
       animation: fadeIn 0.8s ease-in-out;
     }
-
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(15px); }
       to { opacity: 1; transform: translateY(0); }
     }
+    h2 { text-align: center; color: var(--text-dark); margin-bottom: 25px; }
 
-    h2 {
-      text-align: center;
-      color: var(--text-dark);
-      margin-bottom: 25px;
-    }
-
-    label {
-      font-weight: 500;
-      color: var(--text-dark);
-      font-size: 0.95rem;
-    }
-
+    label { font-weight: 500; color: var(--text-dark); font-size: 0.95rem; }
     input {
-      width: 100%;
-      padding: 12px;
-      margin-top: 6px;
-      margin-bottom: 20px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      font-size: 1rem;
-    }
-
-    input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 5px rgba(215, 185, 59, 0.4);
-    }
-
-    .btn {
-      width: 100%;
-      background-color: var(--primary);
-      color: white;
-      font-size: 1rem;
-      font-weight: 600;
-      padding: 12px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    .btn:hover {
-      background-color: #c49e6e;
-    }
-
-    .footer {
-      text-align: center;
-      margin-top: 20px;
-      font-size: 0.9rem;
-      color: #666;
-    }
-
-    .footer a {
-      color: var(--primary);
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .footer a:hover {
-      text-decoration: underline;
-    }
-  </style>
-</head>
-<body>
-  <!-- Navbar -->
-  <nav class="navbar">
-    <h1><a href="index.html" class="logo">Thriftifai</a></h1>
-    <div class="nav-right">
-      <button onclick="window.location.href='signin.html'">Sign In</button>
-      <span>🛒</span>
-    </div>
-  </nav>
-
-  <!-- Sign Up form -->
-  <div class="signup-container">
-    <h2>Create Account</h2>
-    <form id="signupForm">
-      <label for="fullname">Full Name</label>
-      <input type="text" id="fullname" name="fullname" placeholder="Enter your full name" required>
-
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" placeholder="Enter your email" required>
-
-      <label for="password">Password</label>
-      <input type="password" id="password" name="password" placeholder="Create a password" required>
-
-      <button type="submit" class="btn">Sign Up</button>
-    </form>
-
-    <div class="footer">
-      Already have an account? <a href="signin.html">Sign in</a>
-    </div>
-  </div>
-
-<script>
-document.getElementById("signupForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-
-  const fullname = document.getElementById("fullname").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value.trim();
-
-  if (!fullname || !email || !password) {
-    alert("Please fill in all fields.");
-    return;
-  }
-
-  // Get existing users from localStorage
-  const users = JSON.parse(localStorage.getItem("users")) || [];
-
-  // Check if email already exists
-  const existingUser = users.find(user => user.email === email);
-  if (existingUser) {
-    alert("This email is already registered. Please sign in instead.");
-    return;
-  }
-
-  // Add new user
-  users.push({ fullname, email, password });
-  localStorage.setItem("users", JSON.stringify(users));
-
-  alert("Account created successfully! You can now sign in.");
-  window.location.href = "signin.html";
-});
-</script>
-
-</body>
-</html>
-
+      width: 100%; padding: 12px; margin-top:
