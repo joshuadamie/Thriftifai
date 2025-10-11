@@ -1,29 +1,36 @@
 const express = require("express");
-const bodyParser = require("body-parser");
-const bcrypt = require("bcrypt");
-const stripe = require("stripe")("your_stripe_secret_key_here"); // if you use Stripe
+const path = require("path");
 
 const app = express();
 
-// Middleware
-app.use(bodyParser.json());
+// ✅ Serve static files (CSS, JS, images)
+app.use(express.static(path.join(__dirname, "public")));
 
-// ✅ Serve everything inside the "public" folder
-app.use(express.static("public"));
-
-// ✅ Serve index.html as the homepage
+// ✅ Serve index.html for the root path
 app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/public/index.html");
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// other routes here
-// e.g. app.use("/users", require("./routes/users"));
+// ✅ Serve other HTML pages in /public (like tops.html, jackets.html, etc.)
+app.get("/:page", (req, res, next) => {
+  const filePath = path.join(__dirname, "public", `${req.params.page}.html`);
+  res.sendFile(filePath, (err) => {
+    if (err) {
+      next(); // Pass to next middleware (404)
+    }
+  });
+});
 
-// ✅ Only start server locally (not on Vercel)
+// ✅ 404 fallback (optional)
+app.use((req, res) => {
+  res.status(404).send("Page not found");
+});
+
+// ✅ Export for Vercel
+module.exports = app;
+
+// ✅ Only start server locally
 if (require.main === module) {
   const PORT = process.env.PORT || 3000;
-  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+  app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
 }
-
-// ✅ Export the app for Vercel
-module.exports = app;
