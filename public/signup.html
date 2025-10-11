@@ -68,4 +68,105 @@
 
     label { font-weight: 500; color: var(--text-dark); font-size: 0.95rem; }
     input {
-      width: 100%; padding: 12px; margin-top:
+      width: 100%; padding: 12px; margin-top: 6px; margin-bottom: 20px;
+      border: 1px solid #ccc; border-radius: 10px; font-size: 1rem;
+    }
+    input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 5px rgba(215, 185, 59, 0.4);
+    }
+
+    .btn {
+      width: 100%;
+      background-color: var(--primary);
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .btn:hover { background-color: #c49e6e; }
+
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    .footer a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <h1><a href="index.html" class="logo">Thriftifai</a></h1>
+    <div class="nav-right">
+      <button onclick="window.location.href='signin.html'">Sign In</button>
+      <span>🛒</span>
+    </div>
+  </nav>
+
+  <!-- Sign Up form -->
+  <div class="signup-container">
+    <h2>Create Account</h2>
+    <form id="signupForm">
+      <label for="fullname">Full Name</label>
+      <input type="text" id="fullname" name="fullname" placeholder="Enter your full name" required>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="Create a password" required>
+
+      <button type="submit" class="btn">Sign Up</button>
+    </form>
+
+    <div class="footer">
+      Already have an account? <a href="signin.html">Sign in</a>
+    </div>
+  </div>
+
+  <script>
+  document.getElementById("signupForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const fullname = document.getElementById("fullname").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    if (!fullname || !email || !password) {
+      alert("Please fill in all fields.");
+      return;
+    }
+
+    // Retrieve existing users from localStorage
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+
+    // Check if the email already exists
+    const existingUser = users.find(user => user.email === email);
+    if (existingUser) {
+      alert("This email is already registered. Please sign in instead.");
+      return;
+    }
+
+    // Add the new user
+    users.push({ fullname, email, password });
+    localStorage.setItem("users", JSON.stringify(users));
+
+    alert("Account created successfully! You can now sign in.");
+    window.location.href = "signin.html";
+  });
+  </script>
+
+</body>
+</html>
