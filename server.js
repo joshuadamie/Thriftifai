@@ -1,20 +1,27 @@
 const express = require("express");
+const bodyParser = require("body-parser");
+const bcrypt = require("bcrypt");
+const stripe = require("stripe")("your_stripe_secret_key_here"); // if you use Stripe
+
 const app = express();
-const PORT = 3000;
 
+// Middleware
+app.use(bodyParser.json());
 app.use(express.static("public"));
-app.use(express.json());
 
-// Import routes
-const authRoutes = require("./routes/auth");
-const productRoutes = require("./routes/products");
-const cartRoutes = require("./routes/cart");
+// Example route
+app.get("/", (req, res) => {
+  res.send("Welcome to Thriftifai backend!");
+});
 
-app.use("/api", authRoutes);
-app.use("/api/products", productRoutes);
-app.use("/api/cart", cartRoutes);
+// other routes here
+// e.g. app.use("/users", require("./routes/users"));
 
-// Test route
-app.get("/test", (req, res) => res.json({ message: "Server is working!" }));
+// ✅ Only start server locally (not on Vercel)
+if (require.main === module) {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+}
 
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+// ✅ Export the app for Vercel
+module.exports = app;
