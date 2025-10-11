@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thriftifai | Cart</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #d7b48a;
+      --accent: #f2e6d8;
+      --text-dark: #2c2c2c;
+      --text-light: #777;
+      --bg-light: #faf9f7;
+      --white: #ffffff;
+    }
+
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body { font-family: 'Poppins', sans-serif; background: var(--bg-light); color: var(--text-dark); display:flex; flex-direction:column; min-height:100vh; }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 50px;
+      background: var(--white);
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .logo { text-decoration: none; color: var(--text-dark); font-size: 1.8rem; font-weight:600; }
+    .logo:hover { color: var(--primary); }
+    .nav-right { display: flex; align-items: center; gap: 20px; }
+    .nav-right button { background: var(--primary); border:none; color: var(--white); padding:8px 16px; border-radius:8px; cursor:pointer; font-weight:500; transition:0.3s; }
+    .nav-right button:hover { background: var(--accent); color: var(--text-dark); }
+    .cart-icon { font-size:1.3rem; cursor:pointer; position: relative; }
+    .cart-count { position: absolute; top: -8px; right: -12px; background:red; color:white; font-size:0.8rem; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+
+    /* Hero Section */
+    .category-hero {
+      padding: 150px 20px 50px 20px;
+      text-align: center;
+      background: linear-gradient(180deg, #f8eee4, #faf9f7);
+    }
+    .category-hero h2 { font-size: 3rem; margin-bottom: 10px; }
+    .category-hero p { font-size: 1.2rem; color: var(--text-light); }
+
+    main { flex: 1; max-width: 1000px; margin: -50px auto 50px; padding: 20px; }
+
+    /* Cart Table */
+    .cart-container { background: var(--white); padding:20px; border-radius:15px; box-shadow:0 6px 16px rgba(0,0,0,0.08); }
+    .cart-container h2 { text-align:center; margin-bottom:20px; }
+
+    table { width:100%; border-collapse: collapse; }
+    th, td { padding:12px; text-align:center; border-bottom:1px solid #e6e6e6; }
+    th { color: var(--text-dark); }
+    td img { width:80px; height:80px; object-fit:cover; border-radius:8px; }
+    .qty-btn { padding:4px 8px; margin:0 4px; cursor:pointer; border:none; background: var(--accent); border-radius:4px; }
+    .checkout-btn { margin-top:20px; background: var(--primary); color: var(--white); padding:10px 20px; border:none; border-radius:8px; cursor:pointer; font-weight:500; transition:0.3s; }
+    .checkout-btn:hover { background:#cfa87c; }
+
+    .empty-msg { text-align:center; margin-top:50px; font-size:1.2rem; color: var(--text-light); }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: var(--primary);
+      color: var(--white);
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-weight:500;
+      opacity:0;
+      transform: translateY(20px);
+      transition: all 0.4s ease;
+      z-index: 2000;
+    }
+    .toast.show { opacity:1; transform: translateY(0); }
+
+    footer { background: var(--white); color: var(--text-light); text-align:center; padding:20px; font-size:0.85rem; border-top:1px solid #e6e6e6; }
+
+    @media (max-width:768px){
+      .cart-container { padding:10px; margin: 120px 10px 50px; }
+      td img { width:60px; height:60px; }
+      th, td { font-size:0.85rem; }
+      .checkout-btn { padding:8px 16px; font-size:0.9rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <h1><a href="index.html" class="logo">Thriftifai</a></h1>
+    <div class="nav-right" id="nav-right"></div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="category-hero">
+    <h2>Your Cart</h2>
+    <p>Review and manage the items in your cart.</p>
+  </section>
+
+  <main>
+    <div class="cart-container" id="cart-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Subtotal</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="cart-body"></tbody>
+      </table>
+      <div style="text-align:right; margin-top:10px; font-weight:600;">Total: ₦<span id="cart-total">0</span></div>
+      <div style="margin-top:15px; text-align:right;">
+        <button class="checkout-btn" id="checkout-btn">Checkout</button>
+        <button class="checkout-btn" id="clear-cart-btn" style="background:#f44336; margin-left:10px;">Clear Cart</button>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    © 2025 Thriftifai. All rights reserved.
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const user = localStorage.getItem("userEmail");
+    if(!user) window.location.href = "signin.html";
+
+    const navRight = document.getElementById("nav-right");
+    const toast = document.getElementById("toast");
+
+    function showToast(message){
+      toast.textContent = message;
+      toast.classList.add("show");
+      setTimeout(()=> toast.classList.remove("show"), 2000);
+    }
+
+    function updateNavbar(){
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const count = cart.length;
+      navRight.innerHTML = user ? 
+        `<button id="logout-btn">Logout</button><span class="cart-icon" id="cart-icon">🛒<span class="cart-count">${count}</span></span>` :
+        `<button onclick="window.location.href='signin.html'">Sign In</button><span class="cart-icon" id="cart-icon">🛒<span class="cart-count">${count}</span></span>`;
+
+      if(user){
+        document.getElementById("logout-btn").addEventListener("click", ()=>{
+          localStorage.removeItem("userEmail");
+          window.location.href = "index.html";
+        });
+      }
+
+      document.getElementById("cart-icon").addEventListener("click", ()=>{
+        window.location.href = "cart.html";
+      });
+    }
+
+    function renderCart(){
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const tbody = document.getElementById("cart-body");
+      tbody.innerHTML = '';
+      if(cart.length===0){
+        tbody.innerHTML = `<tr><td colspan="5" class="empty-msg">Your cart is empty.</td></tr>`;
+        document.getElementById("cart-total").textContent = '0';
+        updateNavbar();
+        return;
+      }
+
+      let total=0;
+      cart.forEach((item,index)=>{
+        const subtotal = item.price*(item.quantity||1);
+        total+=subtotal;
+        const tr = document.createElement("tr");
+        tr.innerHTML=`
+          <td><img src="${item.img}" alt="${item.name}"><br>${item.name}</td>
+          <td>₦${item.price.toLocaleString()}</td>
+          <td>
+            <button class="qty-btn" onclick="changeQty(${index},-1)">-</button>
+            ${item.quantity||1}
+            <button class="qty-btn" onclick="changeQty(${index},1)">+</button>
+          </td>
+          <td>₦${subtotal.toLocaleString()}</td>
+          <td><button class="qty-btn" style="background:#f44336;color:white;" onclick="removeItem(${index})">Remove</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      document.getElementById("cart-total").textContent = total.toLocaleString();
+      updateNavbar();
+    }
+
+    function changeQty(index,delta){
+      const cart = JSON.parse(localStorage.getItem("cart"))||[];
+      cart[index].quantity = (cart[index].quantity||1)+delta;
+      if(cart[index].quantity<1) cart[index].quantity=1;
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
+      showToast("Quantity updated");
+    }
+
+    function removeItem(index){
+      const cart = JSON.parse(localStorage.getItem("cart"))||[];
+      cart.splice(index,1);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
+      showToast("Item removed from cart");
+    }
+
+    document.getElementById("clear-cart-btn").addEventListener("click", ()=>{
+      const cart = JSON.parse(localStorage.getItem("cart"))||[];
+      if(cart.length>0){
+        localStorage.removeItem("cart");
+        renderCart();
+        showToast("Cart cleared");
+      }
+    });
+
+    document.getElementById("checkout-btn").addEventListener("click", ()=>{
+      showToast("Checkout unavailable for now... Check back later");
+    });
+
+    renderCart();
+    updateNavbar();
+  </script>
+</body>
+</html>

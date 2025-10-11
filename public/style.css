@@ -1,0 +1,129 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f3f3f3;
+  color: #111;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.navbar {
+  background-color: #232f3e;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 30px;
+  color: white;
+}
+
+.navbar h1 {
+  font-size: 1.5em;
+  color: #febd69;
+  margin: 0;
+}
+
+.search-bar {
+  display: flex;
+  flex: 1;
+  margin: 0 30px;
+  max-width: 600px;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 4px 0 0 4px;
+}
+
+.search-bar button {
+  background-color: #febd69;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+}
+
+.nav-buttons {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.nav-buttons button {
+  background-color: transparent;
+  color: white;
+  border: 1px solid #febd69;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cart-icon {
+  font-size: 22px;
+  cursor: pointer;
+}
+
+/* Hero Section */
+.hero {
+  background: linear-gradient(to bottom, #febd69, #f3f3f3);
+  text-align: center;
+  padding: 70px 20px;
+}
+
+.hero h2 {
+  font-size: 2.2em;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  color: #333;
+  font-size: 1.1em;
+}
+
+/* Categories */
+.categories {
+  text-align: center;
+  margin: 50px auto;
+  width: 90%;
+  max-width: 1200px;
+}
+
+.categories h3 {
+  font-size: 1.8em;
+  margin-bottom: 30px;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+}
+
+.category-card {
+  background-color: white;
+  padding: 40px 0;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  font-size: 1.2em;
+  font-weight: bold;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.category-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+  background-color: #fafafa;
+}
+
+/* Footer */
+footer {
+  margin-top: auto;
+  background-color: #232f3e;
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+  font-size: 0.85em;
+}
