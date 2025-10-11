@@ -190,37 +190,29 @@
     </div>
   </div>
 
-  <script>
-  document.getElementById("loginForm").addEventListener("submit", async function(e) {
-    e.preventDefault();
+<script>
+document.getElementById("loginForm").addEventListener("submit", function(e) {
+  e.preventDefault();
 
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
 
-    try {
-      const response = await fetch("/api/signin", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
-      });
+  // Retrieve users from localStorage
+  const users = JSON.parse(localStorage.getItem("users")) || [];
 
-      const data = await response.json();
+  // Check if user exists
+  const existingUser = users.find(u => u.email === email && u.password === password);
 
-      if (data.success) {
-        // Save user to localStorage
-        localStorage.setItem("userEmail", email);
+  if (existingUser) {
+    localStorage.setItem("userEmail", email);
+    alert("Login successful!");
+    window.location.href = "index.html"; // or dashboard.html
+  } else {
+    alert("Invalid email or password.");
+  }
+});
+</script>
 
-        // Redirect to dashboard
-        window.location.href = "dashboard.html";
-      } else {
-        alert(data.message);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      alert("Something went wrong. Please try again.");
-    }
-  });
-  </script>
 
 
 </body>
