@@ -7,11 +7,13 @@ const app = express();
 
 // Middleware
 app.use(bodyParser.json());
+
+// ✅ Serve everything inside the "public" folder
 app.use(express.static("public"));
 
-// Example route
+// ✅ Serve index.html as the homepage
 app.get("/", (req, res) => {
-  res.send("Welcome to Thriftifai backend!");
+  res.sendFile(__dirname + "/public/index.html");
 });
 
 // other routes here
